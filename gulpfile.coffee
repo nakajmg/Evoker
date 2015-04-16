@@ -28,9 +28,9 @@ gulp.task "babelify", ->
   browserify({
     # debug: true
     extensions: [".js"]
-    standalone: "Evoker"
+    standalone: "evoker"
   })
-  .transform babelify.configure ({ blacklist: ["useStrict"] })
+  .transform babelify.configure ({ blacklist: ["strict"], modules: "umd" })
   .require(src, entry: true)
   .bundle()
   .on "error", (err) ->
