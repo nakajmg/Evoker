@@ -12,7 +12,7 @@ bs         = require "browser-sync"
 
 src = "./src/index.js"
 
-dist = "./dist/"
+dist = "./demo/"
 
 name =
   js: "evoker.js"
@@ -42,12 +42,12 @@ gulp.task "babelify", ->
 gulp.task "default", ->
   bs.init
     server:
-      baseDir: ["dist"]
+      baseDir: [dist]
       directory: false
     notify: false
     host: "localhost"
   
   gulp.watch ["src/**/*.js"], ["babelify", bs.reload]
-  gulp.watch ["dist/index.html"], bs.reload
+  gulp.watch ["#{dist}index.html", "#{dist}*.css"], bs.reload
 
 gulp.task "watch", ["default"]
