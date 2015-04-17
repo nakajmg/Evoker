@@ -1,0 +1,49 @@
+<head>
+  <link rel="stylesheet" href="./evoker.css">
+  <link rel="stylesheet" href="./highlight.css">
+</head>
+<body>
+<script src="./prism.js"></script>
+<script src="./evoker.js"></script>
+<script>
+// evoker.log = false;
+evoker.add({
+  script: function() {
+  var hoge = {
+    hoge: "hogehoge",
+    hogehogehoge: "hogehoge"
+  };
+  if (hoge) {
+    console.log(hoge);
+  }
+}
+})
+.add({
+  caption: "",
+  description: "",
+  script: function() {
+    console.log("hogehoge");
+  },
+  html: [
+    '<div class="hoge">',
+    '  hogehoge',
+    '</div>'
+  ]
+});
+
+.add({
+  script: function() {
+    var fuga = "fuga";
+    console.log(fuga);
+  },
+  code: function() {
+    var fuga = "fuga";
+    console.log(fuga);
+    console.log(fuga);
+  },
+  autorun: true
+});
+
+</script>
+
+</body>
