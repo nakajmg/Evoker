@@ -1,30 +1,26 @@
-export default class OutputElement {
+import {EventEmitter2 as EventEmitter} from "eventemitter2";
+
+export default class OutputElement extends EventEmitter {
   constructor() {
-    this.el = document.createElement("div");
-    this._applyStyle(this._defaultStyle());
-    document.body.appendChild(this.el);
+    super();
+    this.logarea = document.createElement("div");
+    this.codearea = document.createElement("div");
+    this.logarea.classList.add("evoker__log");
+    this.codearea.classList.add("evoker__visions");
+    
+    document.body.appendChild(this.codearea);
+    document.body.appendChild(this.logarea);
   }
-  _defaultStyle() {
-    return {
-      color: '#15df30',
-      padding: '5px 7px',
-      backgroundColor: '#333',
-      lineHeight: '1.5',
-      fontSize: '12px',
-      fontFamily: '"Ubuntu Mono", sans-serif',
-      border: '1px solid #000',
-      borderRadius: '2px',
-      margin: '0',
-      minHeight: '19px',
-      whiteSpace: 'pre',
-      letterSpacing: '0.1em'
-    };
+  showLogarea() {
+    this._show(this.logarea);
   }
-  _applyStyle(style) {
-    for(var key in style) {
-      if (style.hasOwnProperty(key)) {
-        this.el.style[key] = style[key];
-      }
-    }
+  hideLogarea() {
+    this._hide(this.logarea);
+  }
+  _show(el) {
+    el.style.display = "block";
+  }
+  _hide(el) {
+    el.style.display = "none";
   }
 }

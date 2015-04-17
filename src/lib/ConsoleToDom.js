@@ -1,23 +1,43 @@
 import typeOf from "./util/typeof";
 
+var className = {
+  log: "evoker__color--log",
+  warn: "evoker__color--warn",
+  error: "evoker__color--error"
+};
+
 export default class ConsoleToDom {
-  constructor({target}) {
-    this.colors = {
-      log:   'rgb(240, 240, 240)',
-      warn:  'rgb(245, 228, 38)',
-      error: 'rgb(255, 52, 52)'
-    };
-    this.types = ['log', 'warn', 'error'];
-    this.el = target || document.body;
-    
-    this._interrupt({type: "log"});
+  constructor({output}) {
+    this.types = ["log", "warn", "error"];
+    this.output = output;
+    this.origins = {};
+    this.target = output.logarea || document.body;
+    this._eventify();
+    this._consolify();
+  }
+  _eventify() {
+    this.output.on("enable", this._consolify.bind(this));
+    this.output.on("disable", this._resetify.bind(this));
+  }
+  _resetify() {
+    this.output.hideLogarea();
+    this.types.forEach((type) => {
+      console[type] = this.origins[type];
+    });
+  }
+  _consolify() {
+    this.output.showLogarea();
+    this.types.forEach((type) => {
+      this._interrupt({type});
+    });
   }
   _interrupt({type}) {
-    var _origin = console[type];
+    this.origins[type] = console[type];
     
     console[type] = (...args) => {
-      _origin.apply(console, args);
+      this.origins[type].apply(console, args);
       var _wrap = document.createElement("div");
+      _wrap.classList.add(className[type]);
       
       args.forEach((log) => {
         _wrap.appendChild(this._convert(log));
@@ -27,17 +47,25 @@ export default class ConsoleToDom {
     };
   }
   _convert(log) {
-    return this._createElement(log);
-    console.log(log);
-    // switch(typeOf(log)) {
-    //   case "Function":
-    //     break;
-    // }
+    var ret;
+    switch(typeOf(log)) {
+      case "String":
+        ret = log;
+        break;
+      case "Object":
+        ret = JSON.stringify(log, null, 2);
+        break;
+      // Todo: ElementとかFunctionのときの書く
+      default:
+        ret = log;
+    }
+    
+    return this._createElement(ret);
   }
   _createElement(str) {
     return document.createTextNode(`${str}\n`);
   }
   _add(el) {
-    this.el.appendChild(el);
+    this.target.appendChild(el);
   }
 }
