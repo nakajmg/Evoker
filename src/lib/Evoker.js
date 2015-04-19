@@ -37,7 +37,7 @@ class Evoker extends EventEmitter {
 }
 
 var output = new OutputElement();
-var logger = new ConsoleToDom({output});
+// var logger = new ConsoleToDom({output});
 
 var evoker = new Evoker({output});
 

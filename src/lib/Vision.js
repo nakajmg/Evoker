@@ -1,10 +1,12 @@
 import {EventEmitter2 as EventEmitter} from "eventemitter2";
 import fnToString from "./util/fnToString";
 import scriptToCodeblock from "./util/scriptToCodeblock";
+import VisionLog from "./VisionLog";
 
 var Prism = Prism || undefined;
 
 var className = {
+  logarea: "evoker__log",
   el: "evoker__vision",
   btn: "evoker__runBtn"
 };
@@ -38,6 +40,7 @@ export default class Vision extends EventEmitter {
     this._addCodeblock();
     this._addHtmlblock();
     this._addRunbtn();
+    this._addLogarea();
   }
   _addCodeblock() {
     var source = this.code ? this.code : this.script;
@@ -54,17 +57,28 @@ export default class Vision extends EventEmitter {
     
     this.el.appendChild(pre);
   }
+  _addLogarea() {
+    this.logarea = document.createElement("div");
+    this.logarea.classList.add(className.logarea);
+    this.el.appendChild(this.logarea);
+    this.console = new VisionLog({target: this.logarea});
+  }
   _addRunbtn() {
     if (!this.script) return;
+    var btnarea = document.createElement("div");
+    btnarea.classList.add("evoker__btn");
     var runbtn = document.createElement("button");
     runbtn.classList.add(className.btn);
     runbtn.textContent = "run";
     runbtn.addEventListener("click", () => this.emit("run") );
-    this.el.appendChild(runbtn);
+    btnarea.appendChild(runbtn);
+    this.el.appendChild(btnarea);
   }
   run() {
     if (typeof this.script === "function") {
+      this.console.enable();
       this.script();
+      this.console.disable();
     }
   }
   evoke(targetElement) {

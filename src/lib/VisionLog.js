@@ -49,7 +49,7 @@ export default class VisionLog {
   disable() {
     types.forEach((type) => {
       console[type] = origins[type];
-    }.bind(this));
+    });
   }
   _createWrapElem(type) {
     var div = document.createElement("div");
