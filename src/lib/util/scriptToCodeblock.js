@@ -1,14 +1,13 @@
 import fnToString from "./fnToString";
+import elem from "./elem";
 
 var className = {
   code: "language-javascript"
 };
 
 export default function scriptToCodeblock(script) {
-  var pre = document.createElement("pre");
-  var code = document.createElement("code");
-  code.classList.add(className.code);
-  code.textContent = fnToString(script);
+  var pre = elem({type: "pre"});
+  var code = elem({className: className.code, type: "code", text: fnToString(script)});
   pre.appendChild(code);
   
   return pre;

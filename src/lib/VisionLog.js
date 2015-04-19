@@ -1,4 +1,5 @@
 import typeOf from "./util/typeof";
+import elem from "./util/elem";
 
 var className = {
   log: "evoker__color--log",
@@ -52,9 +53,7 @@ export default class VisionLog {
     });
   }
   _createWrapElem(type) {
-    var div = document.createElement("div");
-    div.classList.add(className[type]);
-    return div;
+    return elem({className: className[type]});
   }
   _convert(log) {
     var ret;

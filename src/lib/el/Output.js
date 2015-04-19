@@ -1,10 +1,10 @@
 import {EventEmitter2 as EventEmitter} from "eventemitter2";
+import elem from "../util/elem";
 
 export default class OutputElement extends EventEmitter {
   constructor() {
     super();
-    this.codearea = document.createElement("div");
-    this.codearea.classList.add("evoker__visions");
+    this.codearea = elem({className: "evoker__visions"});
     document.body.appendChild(this.codearea);
   }
   showLogarea() {
