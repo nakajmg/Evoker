@@ -686,6 +686,7 @@
             case "Object":
               ret = JSON.stringify(log, null, 2);
               break;
+            // Todo: ElementとかFunctionのときの書く
             default:
               ret = log;
           }
@@ -711,7 +712,7 @@
   module.exports = ConsoleToDom;
 });
 
-},{"./util/typeof":9}],4:[function(require,module,exports){
+},{"./util/typeof":10}],4:[function(require,module,exports){
 (function (factory) {
   if (typeof define === "function" && define.amd) {
     define(["exports", "module", "eventemitter2", "./ConsoleToDom", "./el/Output", "./Vision"], factory);
@@ -791,21 +792,21 @@
   })(EventEmitter);
 
   var output = new OutputElement();
-  var logger = new ConsoleToDom({ output: output });
+  // var logger = new ConsoleToDom({output});
 
   var evoker = new Evoker({ output: output });
 
   module.exports = evoker;
 });
 
-},{"./ConsoleToDom":3,"./Vision":5,"./el/Output":6,"eventemitter2":2}],5:[function(require,module,exports){
+},{"./ConsoleToDom":3,"./Vision":5,"./el/Output":7,"eventemitter2":2}],5:[function(require,module,exports){
 (function (factory) {
   if (typeof define === "function" && define.amd) {
-    define(["exports", "module", "eventemitter2", "./util/fnToString", "./util/scriptToCodeblock"], factory);
+    define(["exports", "module", "eventemitter2", "./util/fnToString", "./util/scriptToCodeblock", "./VisionLog"], factory);
   } else if (typeof exports !== "undefined" && typeof module !== "undefined") {
-    factory(exports, module, require("eventemitter2"), require("./util/fnToString"), require("./util/scriptToCodeblock"));
+    factory(exports, module, require("eventemitter2"), require("./util/fnToString"), require("./util/scriptToCodeblock"), require("./VisionLog"));
   }
-})(function (exports, module, _eventemitter2, _utilFnToString, _utilScriptToCodeblock) {
+})(function (exports, module, _eventemitter2, _utilFnToString, _utilScriptToCodeblock, _VisionLog) {
   var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
 
   var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -822,9 +823,12 @@
 
   var scriptToCodeblock = _interopRequire(_utilScriptToCodeblock);
 
+  var VisionLog = _interopRequire(_VisionLog);
+
   var Prism = Prism || undefined;
 
   var className = {
+    logarea: "evoker__log",
     el: "evoker__vision",
     btn: "evoker__runBtn"
   };
@@ -877,6 +881,7 @@
           this._addCodeblock();
           this._addHtmlblock();
           this._addRunbtn();
+          this._addLogarea();
         }
       },
       _addCodeblock: {
@@ -899,25 +904,38 @@
           this.el.appendChild(pre);
         }
       },
+      _addLogarea: {
+        value: function _addLogarea() {
+          this.logarea = document.createElement("div");
+          this.logarea.classList.add(className.logarea);
+          this.el.appendChild(this.logarea);
+          this.console = new VisionLog({ target: this.logarea });
+        }
+      },
       _addRunbtn: {
         value: function _addRunbtn() {
           var _this = this;
 
           if (!this.script) {
             return;
-          }var runbtn = document.createElement("button");
+          }var btnarea = document.createElement("div");
+          btnarea.classList.add("evoker__btn");
+          var runbtn = document.createElement("button");
           runbtn.classList.add(className.btn);
           runbtn.textContent = "run";
           runbtn.addEventListener("click", function () {
             return _this.emit("run");
           });
-          this.el.appendChild(runbtn);
+          btnarea.appendChild(runbtn);
+          this.el.appendChild(btnarea);
         }
       },
       run: {
         value: function run() {
           if (typeof this.script === "function") {
+            this.console.enable();
             this.script();
+            this.console.disable();
           }
         }
       },
@@ -939,7 +957,148 @@
   module.exports = Vision;
 });
 
-},{"./util/fnToString":7,"./util/scriptToCodeblock":8,"eventemitter2":2}],6:[function(require,module,exports){
+},{"./VisionLog":6,"./util/fnToString":8,"./util/scriptToCodeblock":9,"eventemitter2":2}],6:[function(require,module,exports){
+(function (factory) {
+  if (typeof define === "function" && define.amd) {
+    define(["exports", "module", "./util/typeof"], factory);
+  } else if (typeof exports !== "undefined" && typeof module !== "undefined") {
+    factory(exports, module, require("./util/typeof"));
+  }
+})(function (exports, module, _utilTypeof) {
+  var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
+
+  var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+  var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
+
+  var typeOf = _interopRequire(_utilTypeof);
+
+  var className = {
+    log: "evoker__color--log",
+    warn: "evoker__color--warn",
+    error: "evoker__color--error"
+  };
+
+  var types = ["log", "warn", "error"];
+  var origins = {};
+
+  types.forEach(function (type) {
+    origins[type] = console[type];
+  });
+
+  var _log = function (type, args, vlog) {
+    var wrapElem = vlog._createWrapElem(type);
+    args.forEach(function (log) {
+      wrapElem.appendChild(vlog._convert(log));
+    });
+
+    vlog.target.appendChild(wrapElem);
+  };
+
+  var VisionLog = (function () {
+    function VisionLog(_ref) {
+      var target = _ref.target;
+
+      _classCallCheck(this, VisionLog);
+
+      this.target = target;
+    }
+
+    _createClass(VisionLog, {
+      log: {
+        value: function log() {
+          var _origins$type;
+
+          for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+            args[_key] = arguments[_key];
+          }
+
+          var type = "log";
+          (_origins$type = origins[type]).call.apply(_origins$type, [console].concat(args));
+          _log(type, args, this);
+        }
+      },
+      warn: {
+        value: function warn() {
+          var _origins$type;
+
+          for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+            args[_key] = arguments[_key];
+          }
+
+          var type = "warn";
+          (_origins$type = origins[type]).call.apply(_origins$type, [console].concat(args));
+          _log(type, args, this);
+        }
+      },
+      error: {
+        value: function error() {
+          var _origins$type;
+
+          for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+            args[_key] = arguments[_key];
+          }
+
+          var type = "error";
+          (_origins$type = origins[type]).call.apply(_origins$type, [console].concat(args));
+          _log(type, args, this);
+        }
+      },
+      enable: {
+        value: function enable() {
+          var _this = this;
+
+          types.forEach((function (type) {
+            console[type] = _this[type].bind(_this);
+          }).bind(this));
+        }
+      },
+      disable: {
+        value: function disable() {
+          types.forEach(function (type) {
+            console[type] = origins[type];
+          });
+        }
+      },
+      _createWrapElem: {
+        value: function _createWrapElem(type) {
+          var div = document.createElement("div");
+          div.classList.add(className[type]);
+          return div;
+        }
+      },
+      _convert: {
+        value: function _convert(log) {
+          var ret;
+          switch (typeOf(log)) {
+            case "String":
+              ret = log;
+              break;
+            case "Object":
+              ret = JSON.stringify(log, null, 2);
+              break;
+            // Todo: ElementとかFunctionのときの書く
+            default:
+              ret = log;
+          }
+
+          return this._createLog(ret);
+        }
+      },
+      _createLog: {
+        value: function _createLog(str) {
+          return document.createTextNode("" + str + "\n");
+        }
+      }
+    });
+
+    return VisionLog;
+  })();
+
+  module.exports = VisionLog;
+});
+
+},{"./util/typeof":10}],7:[function(require,module,exports){
 (function (factory) {
   if (typeof define === "function" && define.amd) {
     define(["exports", "module", "eventemitter2"], factory);
@@ -962,13 +1121,9 @@
       _classCallCheck(this, OutputElement);
 
       _get(Object.getPrototypeOf(OutputElement.prototype), "constructor", this).call(this);
-      this.logarea = document.createElement("div");
       this.codearea = document.createElement("div");
-      this.logarea.classList.add("evoker__log");
       this.codearea.classList.add("evoker__visions");
-
       document.body.appendChild(this.codearea);
-      document.body.appendChild(this.logarea);
     }
 
     _inherits(OutputElement, _EventEmitter);
@@ -976,12 +1131,12 @@
     _createClass(OutputElement, {
       showLogarea: {
         value: function showLogarea() {
-          this._show(this.logarea);
+          this._show(this.codearea);
         }
       },
       hideLogarea: {
         value: function hideLogarea() {
-          this._hide(this.logarea);
+          this._hide(this.codearea);
         }
       },
       _show: {
@@ -1002,7 +1157,7 @@
   module.exports = OutputElement;
 });
 
-},{"eventemitter2":2}],7:[function(require,module,exports){
+},{"eventemitter2":2}],8:[function(require,module,exports){
 (function (factory) {
   if (typeof define === "function" && define.amd) {
     define(["exports", "module"], factory);
@@ -1025,7 +1180,7 @@
   }
 });
 
-},{}],8:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 (function (factory) {
   if (typeof define === "function" && define.amd) {
     define(["exports", "module", "./fnToString"], factory);
@@ -1054,7 +1209,7 @@
   }
 });
 
-},{"./fnToString":7}],9:[function(require,module,exports){
+},{"./fnToString":8}],10:[function(require,module,exports){
 (function (factory) {
   if (typeof define === "function" && define.amd) {
     define(["exports", "module"], factory);

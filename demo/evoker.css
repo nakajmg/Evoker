@@ -1,36 +1,62 @@
 .evoker__log {
   color: #15df30;
-  padding: 5px 7px;
+  padding: 15px 7px;
   background-color: #333;
   background-color: #222;
   line-height: 1.5;
   font-size: 12px;
   /*font-family: "Ubuntu Mono"; sans-serif;*/
-  border: 1px solid #000;
-  border-radius: 2px;
+  /*border: 1px solid #000;*/
+  /*border-radius: 2px;*/
   margin: 0 auto;
-  margin-top: 10px;
-  min-height: 19px;
+  /*margin-top: 10px;*/
+  position: relative;
+  min-height: 57px;
   white-space: pre;
   letter-spacing: 0.1em;
+  max-height: 210px;
+  box-sizing: border-box;
+  overflow: scroll;
 }
   .evoker__color--log { color: #15df30; }
+  .evoker__color--log { color: #fff; }
+  .evoker__color--log:before ,
+  .evoker__color--warn:before ,
+  .evoker__color--error:before {
+    content: "＞ ";
+    color: #2EAEEC;
+  }
   .evoker__color--warn { color: rgb(245, 228, 38); }
   .evoker__color--error { color: rgb(255, 52, 52); }
 
 .evoker__vision {
   margin-bottom: 10px;
 }
+.evoker__btn {
+  position: relative;
+  height: 7px;
+  background-color: #343434;
+  width: 100%;
+  box-shadow: inset 0 1px 0 0 rgba(0, 0, 0, 0.5), inset 0 -1px 0 0 rgba(0, 0, 0, 0.5);
+}
   .evoker__runBtn {
+    position: absolute;
+    margin: auto;
+    left: 0;
+    right: 0;
+    /*bottom: 100%;*/
+    margin-top: -15px;
     background-color: #3d3d3e;
     background-color: #9ED94A;
     color: #76daff;
-    color: #fff;
+    color: #222;
     text-shadow: -1px -1px rgba(0, 0, 0, 0.1);
     border: none;
     text-align: center;
-    width: 60px;
+    width: 80px;
     line-height: 30px;
     font-size: 15px;
     cursor: pointer;
+    border-radius: 3px;
+    z-index: 1;
   }
