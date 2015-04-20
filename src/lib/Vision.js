@@ -122,9 +122,9 @@ export default class Vision extends EventEmitter {
   }
   _addLogarea() {
     if (!this.log) return;
-    this.logarea = elem({className: className.logarea})
-    this.el.main.appendChild(this.logarea);
-    this.console = new VisionLog({target: this.logarea});
+    this.el.logarea = elem({className: className.logarea})
+    this.el.main.appendChild(this.el.logarea);
+    this.console = new VisionLog({target: this.el.logarea});
   }
   _addRunbtn() {
     if (!this.script) return;
@@ -170,12 +170,16 @@ export default class Vision extends EventEmitter {
       if (this.log) {
         this.console.enable();
         this.script();
+        this._scrollBottom();
         this.console.disable();
       }
       else {
         this.script();
       }
     }
+  }
+  _scrollBottom() {
+    this.el.logarea.scrollTop = this.el.logarea.scrollHeight;
   }
   evoke(targetElement) {
     targetElement.appendChild(this.el.main);
