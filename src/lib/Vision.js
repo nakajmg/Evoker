@@ -42,8 +42,6 @@ export default class Vision extends EventEmitter {
     this.log = log !== undefined ? log : true;
     
     this._setup();
-    this._eventify();
-    this._autorun();
   }
   _eventify() {
     this.on("run", this.run);
@@ -82,6 +80,32 @@ export default class Vision extends EventEmitter {
       this.emit("run");
     }
   }
+  _makeSameHeight() {
+    var elements = [];
+    if (this.el.codeblock) {
+      elements.push(this.el.codeblock);
+    }
+    if (this.el.description) {
+      elements.push(this.el.description);
+    }
+    if (this.el.htmlblock) {
+      elements.push(this.el.htmlblock);
+    }
+    
+    var height = 0;
+    
+    elements.forEach((el) => {
+      if (height < el.offsetHeight) {
+        height = el.offsetHeight;
+      }
+    });
+    
+    elements.forEach((el) => {
+      el.style.height = `${height}px`;
+      addClass(el, className.content);
+      console.log(el);
+    });
+  }
   _transform() {
     this._addCaption();
     this._addDescription();
@@ -98,13 +122,15 @@ export default class Vision extends EventEmitter {
   }
   _addDescription() {
     if (!this.description) return;
-    this.el.description = elem({className: className.content, text: this.description, attribute: {name: _attr, value:"description"}});
+    // this.el.description = elem({className: className.content, text: this.description, attribute: {name: _attr, value:"description"}});
+    this.el.description = elem({text: this.description, attribute: {name: _attr, value:"description"}});
     addClass(this.el.description, className.description);
     this._add(this.el.description);
   }
   _addCodeblock() {
     var source = this.code ? this.code : this.script;
-    this.el.codeblock = elem({className: className.content, attribute: {name: _attr, value:"js"}});
+    this.el.codeblock = elem({attribute: {name: _attr, value:"js"}});
+    // this.el.codeblock = elem({className: className.content, attribute: {name: _attr, value:"js"}});
     this.el.codeblock.appendChild(scriptToCodeblock(source));
     addClass(this.el.codeblock, className.code);
     addClass(this.el.codeblock, className.contentactive);
@@ -113,7 +139,8 @@ export default class Vision extends EventEmitter {
   }
   _addHtmlblock() {
     if (!this.html) return;
-    this.el.htmlblock = elem({className: className.content, attribute: {name: _attr, value:"html"}});
+    // this.el.htmlblock = elem({className: className.content, attribute: {name: _attr, value:"html"}});
+    this.el.htmlblock = elem({attribute: {name: _attr, value:"html"}});
     addClass(this.el.htmlblock, className.html);
     var pre = elem({type: "pre"});
     var code = elem({type: "code", className: "language-markup", text: this.html.join("\n")});
@@ -126,7 +153,9 @@ export default class Vision extends EventEmitter {
     var separate = elem({className: className.separate});
     this.el.logarea = elem({className: className.logarea});
     this.el.main.appendChild(separate);
+    this.el.main.appendChild(elem({className: "evoker__bar"}));
     this.el.main.appendChild(this.el.logarea);
+    this.el.main.appendChild(elem({className: "evoker__bar"}));
     this.console = new VisionLog({target: this.el.logarea});
   }
   _addRunbtn() {
@@ -184,6 +213,9 @@ export default class Vision extends EventEmitter {
   }
   evoke(targetElement) {
     targetElement.appendChild(this.el.main);
+    this._makeSameHeight();
+    this._eventify();
+    this._autorun();
     if (Prism) {
       [].forEach.call(this.el.main.querySelectorAll("code"), (code) => {
         Prism.highlightElement(code);
