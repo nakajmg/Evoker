@@ -192,7 +192,7 @@ code[class*="language-"],
 pre[class*="language-"] {
   white-space: pre !important;
   word-wrap: normal !important;
-  overflow-x: scroll;
+  overflow: scroll;
   max-height: 610px;
 }
 
@@ -202,7 +202,7 @@ pre {
   background-color: #2a2a2a;
   color: #f0f0f0;
   overflow-x: scroll;
-  padding: 10px;
+  padding: 15px 10px;
   margin: 10px 0 0;
   margin: 0;
   /*margin-top: 30px;*/

@@ -1,12 +1,16 @@
 import {EventEmitter2 as EventEmitter} from "eventemitter2";
 import fnToString from "./util/fnToString";
 import scriptToCodeblock from "./util/scriptToCodeblock";
+import VisionLog from "./VisionLog";
+import elem from "./util/elem";
 
 var Prism = Prism || undefined;
 
 var className = {
+  logarea: "evoker__log",
   el: "evoker__vision",
-  btn: "evoker__runBtn"
+  btn: "evoker__btn",
+  runbtn: "evoker__runBtn"
 };
 
 export default class Vision extends EventEmitter {
@@ -24,8 +28,7 @@ export default class Vision extends EventEmitter {
     this.on("run", this.run);
   }
   _setup() {
-    this.el = document.createElement("div");
-    this.el.classList.add(className.el);
+    this.el = elem({className: className.el});
     this._transform();
     this._autorun();
   }
@@ -38,6 +41,7 @@ export default class Vision extends EventEmitter {
     this._addCodeblock();
     this._addHtmlblock();
     this._addRunbtn();
+    this._addLogarea();
   }
   _addCodeblock() {
     var source = this.code ? this.code : this.script;
@@ -46,25 +50,32 @@ export default class Vision extends EventEmitter {
   }
   _addHtmlblock() {
     if (!this.html) return;
-    var pre = document.createElement("pre");
-    var code = document.createElement("code");
-    code.classList.add("language-markup");
+    var pre = elem({type: "pre"});
+    var code = elem({type: "code", className: "language-markup"});
     pre.appendChild(code);
     code.textContent = this.html.join('\n');
     
     this.el.appendChild(pre);
   }
+  _addLogarea() {
+    this.logarea = elem({className: className.logarea})
+    this.el.appendChild(this.logarea);
+    this.console = new VisionLog({target: this.logarea});
+  }
   _addRunbtn() {
     if (!this.script) return;
-    var runbtn = document.createElement("button");
-    runbtn.classList.add(className.btn);
-    runbtn.textContent = "run";
+    var btnarea = elem({className: className.btn});
+    var runbtn = elem({type: "button", className: className.runbtn, text: "run"});
+
     runbtn.addEventListener("click", () => this.emit("run") );
-    this.el.appendChild(runbtn);
+    btnarea.appendChild(runbtn);
+    this.el.appendChild(btnarea);
   }
   run() {
     if (typeof this.script === "function") {
+      this.console.enable();
       this.script();
+      this.console.disable();
     }
   }
   evoke(targetElement) {
