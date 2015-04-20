@@ -5,13 +5,9 @@
   background-color: #222;
   line-height: 1.5;
   font-size: 12px;
-  /*font-family: "Ubuntu Mono"; sans-serif;*/
-  /*border: 1px solid #000;*/
-  /*border-radius: 2px;*/
   margin: 0 auto;
-  /*margin-top: 10px;*/
   position: relative;
-  min-height: 57px;
+  min-height: 48px;
   white-space: pre;
   letter-spacing: 0.1em;
   max-height: 210px;

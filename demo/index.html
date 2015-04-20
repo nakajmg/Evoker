@@ -11,6 +11,8 @@
 <script src="./evoker.js"></script>
 <script>
 // evoker.log = false;
+var count = 0;
+
 evoker.add({
   script: function() {
     var hoge = "hogehoge";
@@ -49,8 +51,12 @@ evoker.add({
   ],
   autorun: true,
   description: "autorun:true でコードを自動実行。\n html: Array でHTMLブロックの表示"
+})
+.add({
+  script: function() {
+    console.log(count += 10);
+  }
 });
-
 </script>
 
 </body>
