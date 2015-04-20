@@ -192,7 +192,7 @@ code[class*="language-"],
 pre[class*="language-"] {
   white-space: pre !important;
   word-wrap: normal !important;
-  overflow-x: scroll;
+  overflow: scroll;
   max-height: 610px;
 }
 

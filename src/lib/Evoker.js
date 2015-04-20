@@ -10,22 +10,6 @@ class Evoker extends EventEmitter {
     this.visions = [];
     this.output = output;
     this.target = output.codearea;
-    this._define();
-  }
-  _define() {
-    Object.defineProperty(this, "log", {
-      get() {
-        return c;
-      },
-      set(tf) {
-        if (tf === false) {
-          this.output.emit("disable");
-        }
-        else {
-          this.output.emit("enable");
-        }
-      }
-    });
   }
   add({script, code, html, autorun}) {
     var vision = new Vision({script, code, html, autorun});
@@ -37,7 +21,6 @@ class Evoker extends EventEmitter {
 }
 
 var output = new OutputElement();
-// var logger = new ConsoleToDom({output});
 
 var evoker = new Evoker({output});
 

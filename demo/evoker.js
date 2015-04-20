@@ -712,7 +712,7 @@
   module.exports = ConsoleToDom;
 });
 
-},{"./util/typeof":10}],4:[function(require,module,exports){
+},{"./util/typeof":11}],4:[function(require,module,exports){
 (function (factory) {
   if (typeof define === "function" && define.amd) {
     define(["exports", "module", "eventemitter2", "./ConsoleToDom", "./el/Output", "./Vision"], factory);
@@ -750,28 +750,11 @@
       this.visions = [];
       this.output = output;
       this.target = output.codearea;
-      this._define();
     }
 
     _inherits(Evoker, _EventEmitter);
 
     _createClass(Evoker, {
-      _define: {
-        value: function _define() {
-          Object.defineProperty(this, "log", {
-            get: function get() {
-              return c;
-            },
-            set: function set(tf) {
-              if (tf === false) {
-                this.output.emit("disable");
-              } else {
-                this.output.emit("enable");
-              }
-            }
-          });
-        }
-      },
       add: {
         value: function add(_ref) {
           var script = _ref.script;
@@ -792,7 +775,6 @@
   })(EventEmitter);
 
   var output = new OutputElement();
-  // var logger = new ConsoleToDom({output});
 
   var evoker = new Evoker({ output: output });
 
@@ -802,11 +784,11 @@
 },{"./ConsoleToDom":3,"./Vision":5,"./el/Output":7,"eventemitter2":2}],5:[function(require,module,exports){
 (function (factory) {
   if (typeof define === "function" && define.amd) {
-    define(["exports", "module", "eventemitter2", "./util/fnToString", "./util/scriptToCodeblock", "./VisionLog"], factory);
+    define(["exports", "module", "eventemitter2", "./util/fnToString", "./util/scriptToCodeblock", "./VisionLog", "./util/elem"], factory);
   } else if (typeof exports !== "undefined" && typeof module !== "undefined") {
-    factory(exports, module, require("eventemitter2"), require("./util/fnToString"), require("./util/scriptToCodeblock"), require("./VisionLog"));
+    factory(exports, module, require("eventemitter2"), require("./util/fnToString"), require("./util/scriptToCodeblock"), require("./VisionLog"), require("./util/elem"));
   }
-})(function (exports, module, _eventemitter2, _utilFnToString, _utilScriptToCodeblock, _VisionLog) {
+})(function (exports, module, _eventemitter2, _utilFnToString, _utilScriptToCodeblock, _VisionLog, _utilElem) {
   var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
 
   var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -825,12 +807,15 @@
 
   var VisionLog = _interopRequire(_VisionLog);
 
+  var elem = _interopRequire(_utilElem);
+
   var Prism = Prism || undefined;
 
   var className = {
     logarea: "evoker__log",
     el: "evoker__vision",
-    btn: "evoker__runBtn"
+    btn: "evoker__btn",
+    runbtn: "evoker__runBtn"
   };
 
   var Vision = (function (_EventEmitter) {
@@ -863,8 +848,7 @@
       },
       _setup: {
         value: function _setup() {
-          this.el = document.createElement("div");
-          this.el.classList.add(className.el);
+          this.el = elem({ className: className.el });
           this._transform();
           this._autorun();
         }
@@ -895,9 +879,8 @@
         value: function _addHtmlblock() {
           if (!this.html) {
             return;
-          }var pre = document.createElement("pre");
-          var code = document.createElement("code");
-          code.classList.add("language-markup");
+          }var pre = elem({ type: "pre" });
+          var code = elem({ type: "code", className: "language-markup" });
           pre.appendChild(code);
           code.textContent = this.html.join("\n");
 
@@ -906,8 +889,7 @@
       },
       _addLogarea: {
         value: function _addLogarea() {
-          this.logarea = document.createElement("div");
-          this.logarea.classList.add(className.logarea);
+          this.logarea = elem({ className: className.logarea });
           this.el.appendChild(this.logarea);
           this.console = new VisionLog({ target: this.logarea });
         }
@@ -918,11 +900,9 @@
 
           if (!this.script) {
             return;
-          }var btnarea = document.createElement("div");
-          btnarea.classList.add("evoker__btn");
-          var runbtn = document.createElement("button");
-          runbtn.classList.add(className.btn);
-          runbtn.textContent = "run";
+          }var btnarea = elem({ className: className.btn });
+          var runbtn = elem({ type: "button", className: className.runbtn, text: "run" });
+
           runbtn.addEventListener("click", function () {
             return _this.emit("run");
           });
@@ -957,14 +937,14 @@
   module.exports = Vision;
 });
 
-},{"./VisionLog":6,"./util/fnToString":8,"./util/scriptToCodeblock":9,"eventemitter2":2}],6:[function(require,module,exports){
+},{"./VisionLog":6,"./util/elem":8,"./util/fnToString":9,"./util/scriptToCodeblock":10,"eventemitter2":2}],6:[function(require,module,exports){
 (function (factory) {
   if (typeof define === "function" && define.amd) {
-    define(["exports", "module", "./util/typeof"], factory);
+    define(["exports", "module", "./util/typeof", "./util/elem"], factory);
   } else if (typeof exports !== "undefined" && typeof module !== "undefined") {
-    factory(exports, module, require("./util/typeof"));
+    factory(exports, module, require("./util/typeof"), require("./util/elem"));
   }
-})(function (exports, module, _utilTypeof) {
+})(function (exports, module, _utilTypeof, _utilElem) {
   var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
 
   var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -972,6 +952,8 @@
   var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
   var typeOf = _interopRequire(_utilTypeof);
+
+  var elem = _interopRequire(_utilElem);
 
   var className = {
     log: "evoker__color--log",
@@ -1062,9 +1044,7 @@
       },
       _createWrapElem: {
         value: function _createWrapElem(type) {
-          var div = document.createElement("div");
-          div.classList.add(className[type]);
-          return div;
+          return elem({ className: className[type] });
         }
       },
       _convert: {
@@ -1098,14 +1078,16 @@
   module.exports = VisionLog;
 });
 
-},{"./util/typeof":10}],7:[function(require,module,exports){
+},{"./util/elem":8,"./util/typeof":11}],7:[function(require,module,exports){
 (function (factory) {
   if (typeof define === "function" && define.amd) {
-    define(["exports", "module", "eventemitter2"], factory);
+    define(["exports", "module", "eventemitter2", "../util/elem"], factory);
   } else if (typeof exports !== "undefined" && typeof module !== "undefined") {
-    factory(exports, module, require("eventemitter2"));
+    factory(exports, module, require("eventemitter2"), require("../util/elem"));
   }
-})(function (exports, module, _eventemitter2) {
+})(function (exports, module, _eventemitter2, _utilElem) {
+  var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
+
   var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
   var _get = function get(object, property, receiver) { var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc && desc.writable) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
@@ -1116,13 +1098,14 @@
 
   var EventEmitter = _eventemitter2.EventEmitter2;
 
+  var elem = _interopRequire(_utilElem);
+
   var OutputElement = (function (_EventEmitter) {
     function OutputElement() {
       _classCallCheck(this, OutputElement);
 
       _get(Object.getPrototypeOf(OutputElement.prototype), "constructor", this).call(this);
-      this.codearea = document.createElement("div");
-      this.codearea.classList.add("evoker__visions");
+      this.codearea = elem({ className: "evoker__visions" });
       document.body.appendChild(this.codearea);
     }
 
@@ -1157,7 +1140,38 @@
   module.exports = OutputElement;
 });
 
-},{"eventemitter2":2}],8:[function(require,module,exports){
+},{"../util/elem":8,"eventemitter2":2}],8:[function(require,module,exports){
+(function (factory) {
+  if (typeof define === "function" && define.amd) {
+    define(["exports", "module"], factory);
+  } else if (typeof exports !== "undefined" && typeof module !== "undefined") {
+    factory(exports, module);
+  }
+})(function (exports, module) {
+  module.exports = elem;
+
+  function elem(_ref) {
+    var className = _ref.className;
+    var type = _ref.type;
+    var text = _ref.text;
+
+    var el;
+    type = type || "div";
+    el = document.createElement(type);
+
+    if (className) {
+      el.classList.add(className);
+    }
+
+    if (text) {
+      el.textContent = text;
+    }
+
+    return el;
+  }
+});
+
+},{}],9:[function(require,module,exports){
 (function (factory) {
   if (typeof define === "function" && define.amd) {
     define(["exports", "module"], factory);
@@ -1180,36 +1194,36 @@
   }
 });
 
-},{}],9:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 (function (factory) {
   if (typeof define === "function" && define.amd) {
-    define(["exports", "module", "./fnToString"], factory);
+    define(["exports", "module", "./fnToString", "./elem"], factory);
   } else if (typeof exports !== "undefined" && typeof module !== "undefined") {
-    factory(exports, module, require("./fnToString"));
+    factory(exports, module, require("./fnToString"), require("./elem"));
   }
-})(function (exports, module, _fnToString) {
+})(function (exports, module, _fnToString, _elem) {
   var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
 
   module.exports = scriptToCodeblock;
 
   var fnToString = _interopRequire(_fnToString);
 
+  var elem = _interopRequire(_elem);
+
   var className = {
     code: "language-javascript"
   };
 
   function scriptToCodeblock(script) {
-    var pre = document.createElement("pre");
-    var code = document.createElement("code");
-    code.classList.add(className.code);
-    code.textContent = fnToString(script);
+    var pre = elem({ type: "pre" });
+    var code = elem({ className: className.code, type: "code", text: fnToString(script) });
     pre.appendChild(code);
 
     return pre;
   }
 });
 
-},{"./fnToString":8}],10:[function(require,module,exports){
+},{"./elem":8,"./fnToString":9}],11:[function(require,module,exports){
 (function (factory) {
   if (typeof define === "function" && define.amd) {
     define(["exports", "module"], factory);
