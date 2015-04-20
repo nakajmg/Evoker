@@ -40,10 +40,17 @@
   font-size: 14px;
   background-color: #222;
   color: #eee;
-  padding: 15px 10px 25px;
+  padding: 25px 10px 25px;
   line-height: 18px;
   white-space: pre;
   overflow: auto;
+}
+.evoker__separate {
+  position: relative;
+  height: 7px;
+  background-color: #343434;
+  width: 100%;
+  box-shadow: inset 0 1px 0 0 rgba(0, 0, 0, 0.5), inset 0 -1px 0 0 rgba(0, 0, 0, 0.5);
 }
 .evoker__btn {
   position: relative;
@@ -55,9 +62,8 @@
   .evoker__runBtn {
     position: absolute;
     margin: auto;
-    left: 0;
-    right: 0;
-    /*bottom: 100%;*/
+    bottom: 7px;
+    right: 10px;
     margin-top: -15px;
     background-color: #3d3d3e;
     background-color: #9ED94A;
@@ -67,51 +73,50 @@
     border: none;
     text-align: center;
     width: 80px;
-    line-height: 30px;
+    line-height: 24px;
     font-size: 15px;
     cursor: pointer;
-    border-radius: 3px;
+    border-radius: 2px;
     z-index: 1;
   }
 
 .evoker__tabs {
+  position: relative;
   box-sizing: border-box;
   width: 100%;
   background-color: #111;
-  font-family: "Lucida Grande","Lucida Sans Unicode", Tahoma, sans-serif;
-  color: #9ED94A;
+  font-family: Tahoma, sans-serif,"Lucida Grande","Lucida Sans Unicode";
+  color: #eee;
+  padding: 0 5px;
 }
   .evoker__tab {
-    padding: 10px 16px;
-    /*line-height: 40px;*/
+    padding: 13px 16px;
+    font-size: 14px;
     display: inline-block;
     box-sizing: border-box;
     text-align: center;
     position: relative;
     cursor: pointer;
-    /*width: 25%;*/
     vertical-align: top;
   }
   .evoker__tab:hover {
-    background-color: #9ED94A;
-    color: #111;
+    /*background-color: #9ED94A;*/
+    /*color: #111;*/
   }
   .evoker__tab.evoker__tab--active {
-    background-color: #9ED94A;
-    color: #111;
+    /*background-color: #9ED94A;*/
+    /*color: #111;*/
   }
-  .evoker__tab--active:before {
+  .evoker__tab--active:before,
+  .evoker__tab:hover:before {
     content: "";
     position: absolute;
-    width: 0;
     height: 0;
-    border: 10px solid transparent;
-    border-top-color: #9ED94A;
-    border-top-width: 8px;
+    border-bottom: 4px solid #9ED94A;
     margin: auto;
-    left: 0;
-    right: 0;
-    top: 100%;
+    left: 5px;
+    right: 5px;
+    bottom: 0;
     z-index: 1;
   }
 

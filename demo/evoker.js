@@ -834,7 +834,8 @@
     contentactive: "evoker__content--active",
     html: "evoker__html",
     code: "evoker__script",
-    css: "evoker__css"
+    css: "evoker__css",
+    separate: "evoker__separate"
   };
   var _attr = "data-evoker-name";
 
@@ -918,9 +919,9 @@
           this._addDescription();
           this._addCodeblock();
           this._addHtmlblock();
-          this._addRunbtn();
           this._addLogarea();
           this._addTab();
+          this._addRunbtn();
         }
       },
       _addCaption: {
@@ -968,7 +969,9 @@
         value: function _addLogarea() {
           if (!this.log) {
             return;
-          }this.el.logarea = elem({ className: className.logarea });
+          }var separate = elem({ className: className.separate });
+          this.el.logarea = elem({ className: className.logarea });
+          this.el.main.appendChild(separate);
           this.el.main.appendChild(this.el.logarea);
           this.console = new VisionLog({ target: this.el.logarea });
         }
@@ -979,15 +982,12 @@
 
           if (!this.script) {
             return;
-          }var btnarea = elem({ className: className.btn });
-          var runbtn = elem({ type: "button", className: className.runbtn, text: "run" });
-
+          }var runbtn = elem({ type: "button", className: className.runbtn, text: "run" });
           runbtn.addEventListener("click", function () {
             return _this.emit("run");
           });
-          btnarea.appendChild(runbtn);
-          this.el.main.appendChild(btnarea);
-          this.el.btnarea = btnarea;
+          this.el.tabs.appendChild(runbtn);
+          this.el.runbtn = runbtn;
         }
       },
       _addTab: {
