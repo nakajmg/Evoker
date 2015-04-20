@@ -43,6 +43,7 @@
   padding: 15px 10px 25px;
   line-height: 18px;
   white-space: pre;
+  overflow: auto;
 }
 .evoker__btn {
   position: relative;
