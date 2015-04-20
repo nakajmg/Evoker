@@ -1,4 +1,8 @@
+<!DOCTYPE html>
+<html lang="ja">
 <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
   <link rel="stylesheet" href="./evoker.css">
   <link rel="stylesheet" href="./highlight.css">
 </head>
@@ -9,29 +13,28 @@
 // evoker.log = false;
 evoker.add({
   script: function() {
-  var hoge = {
-    hoge: "hogehoge",
-    hogehogehoge: "hogehoge"
-  };
-  if (hoge) {
+    var hoge = "hogehoge";
     console.log(hoge);
   }
-}
 })
 .add({
-  caption: "",
-  description: "",
+  caption: "短い説明",
+  description: "log:false でログを普通のconsoleに出力する。\ncodeオプションで実行するJSと表示するJSを変えられる",
   timestamp: true,
+  log: false,
   script: function() {
     console.log("hogehoge");
   },
-  html: [
-    '<div class="hoge">',
-    '  hogehoge',
-    '</div>'
-  ]
+  code: function() {
+    return {
+      caption: "短い説明",
+      log: false,
+      script: function() {
+        console.log("hogehoge");
+      }
+    }
+  }
 })
-
 .add({
   script: function() {
     var fuga = "fuga";
@@ -39,14 +42,16 @@ evoker.add({
     console.warn(fuga);
     console.error(fuga);
   },
-  code: function() {
-    var fuga = "fuga";
-    console.log(fuga);
-    console.log(fuga);
-  },
-  autorun: true
+  html: [
+    '<div class="hoge">',
+    ' hogehoge',
+    '</div>'
+  ],
+  autorun: true,
+  description: "autorun:true でコードを自動実行。\n html: Array でHTMLブロックの表示"
 });
 
 </script>
 
 </body>
+</html>

@@ -23,14 +23,29 @@
   .evoker__color--log:before ,
   .evoker__color--warn:before ,
   .evoker__color--error:before {
-    content: "＞ ";
+    content: "\003e\00a0"; /* "> " */
     color: #2EAEEC;
   }
   .evoker__color--warn { color: rgb(245, 228, 38); }
   .evoker__color--error { color: rgb(255, 52, 52); }
 
 .evoker__vision {
-  margin-bottom: 10px;
+  max-width: 500px;
+  margin-bottom: 30px;
+}
+.evoker__caption {
+  color: #222;
+  font-size: 18px;
+  font-weight: 600;
+  padding-bottom: 3px;
+}
+.evoker__description {
+  font-size: 14px;
+  background-color: #222;
+  color: #eee;
+  padding: 15px 10px 25px;
+  line-height: 18px;
+  white-space: pre;
 }
 .evoker__btn {
   position: relative;
@@ -60,3 +75,51 @@
     border-radius: 3px;
     z-index: 1;
   }
+
+.evoker__tabs {
+  box-sizing: border-box;
+  width: 100%;
+  background-color: #111;
+  font-family: "Lucida Grande","Lucida Sans Unicode", Tahoma, sans-serif;
+  color: #9ED94A;
+}
+  .evoker__tab {
+    padding: 10px 16px;
+    /*line-height: 40px;*/
+    display: inline-block;
+    box-sizing: border-box;
+    text-align: center;
+    position: relative;
+    cursor: pointer;
+    /*width: 25%;*/
+    vertical-align: top;
+  }
+  .evoker__tab:hover {
+    background-color: #9ED94A;
+    color: #111;
+  }
+  .evoker__tab.evoker__tab--active {
+    background-color: #9ED94A;
+    color: #111;
+  }
+  .evoker__tab--active:before {
+    content: "";
+    position: absolute;
+    width: 0;
+    height: 0;
+    border: 10px solid transparent;
+    border-top-color: #9ED94A;
+    border-top-width: 8px;
+    margin: auto;
+    left: 0;
+    right: 0;
+    top: 100%;
+    z-index: 1;
+  }
+
+.evoker__content {
+  display: none;
+}
+.evoker__content.evoker__content--active {
+  display: block;
+}
