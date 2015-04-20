@@ -168,6 +168,7 @@ export default class Vision extends EventEmitter {
   run() {
     if (typeof this.script === "function") {
       if (this.log) {
+        this.console.removeLatestClass();
         this.console.enable();
         this.script();
         this._scrollBottom();

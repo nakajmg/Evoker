@@ -1,10 +1,13 @@
 import typeOf from "./util/typeof";
 import elem from "./util/elem";
+import {addClass} from "./util/elem";
+import {removeClass} from "./util/elem";
 
 var className = {
   log: "evoker__color--log",
   warn: "evoker__color--warn",
-  error: "evoker__color--error"
+  error: "evoker__color--error",
+  latest: "evoker__color--latest"
 };
 
 var types = ["log", "warn", "error"];
@@ -22,6 +25,7 @@ var _log = (type, args, vlog) => {
   
   vlog.target.appendChild(wrapElem);
 };
+
 
 export default class VisionLog {
   constructor({target}) {
@@ -52,8 +56,16 @@ export default class VisionLog {
       console[type] = origins[type];
     });
   }
+  removeLatestClass() {
+    var $latests = this.target.querySelectorAll(`.${className.latest}`);
+    [].forEach.call($latests, ($latest) => {
+      removeClass($latest, className.latest);
+    });
+  }
   _createWrapElem(type) {
-    return elem({className: className[type]});
+    var el = elem({className: className[type]});
+    addClass(el, className.latest);
+    return el;
   }
   _convert(log) {
     var ret;
