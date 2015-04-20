@@ -1025,6 +1025,7 @@
         value: function run() {
           if (typeof this.script === "function") {
             if (this.log) {
+              this.console.removeLatestClass();
               this.console.enable();
               this.script();
               this._scrollBottom();
@@ -1076,10 +1077,14 @@
 
   var elem = _interopRequire(_utilElem);
 
+  var addClass = _utilElem.addClass;
+  var removeClass = _utilElem.removeClass;
+
   var className = {
     log: "evoker__color--log",
     warn: "evoker__color--warn",
-    error: "evoker__color--error"
+    error: "evoker__color--error",
+    latest: "evoker__color--latest"
   };
 
   var types = ["log", "warn", "error"];
@@ -1163,9 +1168,19 @@
           });
         }
       },
+      removeLatestClass: {
+        value: function removeLatestClass() {
+          var $latests = this.target.querySelectorAll("." + className.latest);
+          [].forEach.call($latests, function ($latest) {
+            removeClass($latest, className.latest);
+          });
+        }
+      },
       _createWrapElem: {
         value: function _createWrapElem(type) {
-          return elem({ className: className[type] });
+          var el = elem({ className: className[type] });
+          addClass(el, className.latest);
+          return el;
         }
       },
       _convert: {

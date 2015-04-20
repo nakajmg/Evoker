@@ -15,16 +15,40 @@
   box-sizing: border-box;
   overflow: scroll;
 }
-  .evoker__color--log { color: #15df30; }
-  .evoker__color--log { color: #fff; }
-  .evoker__color--log:before ,
-  .evoker__color--warn:before ,
-  .evoker__color--error:before {
-    content: "\003e\00a0"; /* "> " */
-    color: #2EAEEC;
-  }
-  .evoker__color--warn { color: rgb(245, 228, 38); }
+  .evoker__color--log { color: #eee; }
+  .evoker__color--warn { color: #eee; }
   .evoker__color--error { color: rgb(255, 52, 52); }
+  .evoker__color--log:before,
+  .evoker__color--warn:before,
+  .evoker__color--error:before {
+    content: "";
+    display: inline-block;
+    background-size: 100%;
+    background-repeat: no-repeat;
+    width: 13px;
+    height: 13px;
+    vertical-align: text-top;
+    margin-right: 5px;
+  }
+  .evoker__color--log:before {
+    background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2014%2014%22%20enable-background%3D%22new%200%200%2014%2014%22%3E%3Cpath%20fill%3D%22none%22%20d%3D%22M0%200h14v14h-14z%22%2F%3E%3Cpath%20fill%3D%22%23fff%22%20d%3D%22M3%202v2l6%203-6%203v2l8-4v-2z%22%2F%3E%3C%2Fsvg%3E");
+  }
+  .evoker__color--warn:before {
+    background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2014%2014%22%20enable-background%3D%22new%200%200%2014%2014%22%3E%3Cpath%20fill%3D%22none%22%20d%3D%22M0%200h14v14h-14z%22%2F%3E%3Cpath%20fill%3D%22%23fe0%22%20d%3D%22M6.03%202.714c.534-.951%201.407-.951%201.941%200l4.8%208.557c.534.951.104%201.73-.956%201.73h-9.63c-1.059%200-1.489-.778-.956-1.73l4.801-8.557zm1.97%202.286h-2v4h2v-4zm0%205h-2v2h2v-2z%22%2F%3E%3C%2Fsvg%3E");
+  }
+  .evoker__color--error:before {
+    background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2014%2014%22%20enable-background%3D%22new%200%200%2014%2014%22%3E%3Cpath%20fill%3D%22none%22%20d%3D%22M0%200h14v14h-14z%22%2F%3E%3Cpath%20fill%3D%22%23f40%22%20d%3D%22M6.998%2013c-3.314%200-6-2.686-6-6s2.686-6%206-6%206%202.686%206%206-2.687%206-6%206zm3-7.667l-1.334-1.333-1.666%201.667-1.667-1.667-1.333%201.333%201.666%201.667-1.666%201.667%201.333%201.333%201.667-1.667%201.666%201.667%201.333-1.333-1.666-1.667%201.667-1.667z%22%2F%3E%3C%2Fsvg%3E");
+  }
+  .evoker__color--log,
+  .evoker__color--warn,
+  .evoker__color--error {
+    opacity: 0.2;
+  }
+  .evoker__color--log.evoker__color--latest,
+  .evoker__color--warn.evoker__color--latest,
+  .evoker__color--error.evoker__color--latest {
+    opacity: 1;
+  }
 
 .evoker__vision {
   max-width: 500px;
