@@ -23,7 +23,7 @@ evoker.add({
   caption: "短い説明",
   description: "log:false でログを普通のconsoleに出力する。\ncodeオプションで実行するJSと表示するJSを変えられる",
   timestamp: true,
-  log: false,
+  log: true,
   script: function() {
     console.log("hogehoge");
   },
@@ -33,6 +33,14 @@ evoker.add({
       log: false,
       script: function() {
         console.log("hogehoge");
+      },
+      hoge: {
+        hoge: "hogehoge",
+        hoge: "hogehoge",
+        hoge: "hogehoge",
+        hoge: "hogehoge",
+        hoge: "hogehoge",
+        hoge: "hogehoge",
       }
     }
   }
