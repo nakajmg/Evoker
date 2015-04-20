@@ -11,8 +11,8 @@ class Evoker extends EventEmitter {
     this.output = output;
     this.target = output.codearea;
   }
-  add({script, code, html, autorun}) {
-    var vision = new Vision({script, code, html, autorun});
+  add({script, code, html, autorun, caption, description, log}) {
+    var vision = new Vision({script, code, html, autorun, caption, description, log});
     vision.evoke(this.target);
     this.visions.push(vision);
     
