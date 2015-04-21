@@ -42,9 +42,14 @@ export default class Vision extends EventEmitter {
     this.log = log !== undefined ? log : true;
     
     this._setup();
+    this._transform();
+    this._activate();
   }
   _eventify() {
     this.on("run", this.run);
+
+  }
+  _enableTabUI() {
     var $tabs = this.el.tabs.querySelectorAll(".evoker__tab");
     var $contents = this.el.contents.querySelectorAll(".evoker__content");
     
@@ -73,7 +78,10 @@ export default class Vision extends EventEmitter {
     this.el.contents = elem({className: className.contents});
     this.el.main.appendChild(this.el.info);
     this.el.main.appendChild(this.el.contents);
-    this._transform();
+  }
+  _activate() {
+    addClass(this.el.codeblock, className.contentactive);
+    addClass(this.el.tabs.firstChild, className.tabactive);
   }
   _autorun() {
     if (this.autorun) {
@@ -103,7 +111,6 @@ export default class Vision extends EventEmitter {
     elements.forEach((el) => {
       el.style.height = `${height}px`;
       addClass(el, className.content);
-      console.log(el);
     });
   }
   _transform() {
@@ -133,7 +140,6 @@ export default class Vision extends EventEmitter {
     // this.el.codeblock = elem({className: className.content, attribute: {name: _attr, value:"js"}});
     this.el.codeblock.appendChild(scriptToCodeblock(source));
     addClass(this.el.codeblock, className.code);
-    addClass(this.el.codeblock, className.contentactive);
     
     this._add(this.el.codeblock);
   }
@@ -167,12 +173,8 @@ export default class Vision extends EventEmitter {
   }
   _addTab() {
     var tabs = elem({className: className.tabs});
-    var current;
     if (this.script) {
-      current = elem({className: className.tab, text:"JS", attribute: {name: _attr, value:"js"}});
-      addClass(current, className.tabactive);
-      tabs.appendChild(current);
-      
+      tabs.appendChild(elem({className: className.tab, text:"JS", attribute: {name: _attr, value:"js"}}));      
     }
     if (this.html) {
       tabs.appendChild(elem({className: className.tab, text:"HTML", attribute: {name: _attr, value:"html"}}));
@@ -215,6 +217,7 @@ export default class Vision extends EventEmitter {
     targetElement.appendChild(this.el.main);
     this._makeSameHeight();
     this._eventify();
+    this._enableTabUI();
     this._autorun();
     if (Prism) {
       [].forEach.call(this.el.main.querySelectorAll("code"), (code) => {
