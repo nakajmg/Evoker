@@ -861,6 +861,8 @@
       this.log = log !== undefined ? log : true;
 
       this._setup();
+      this._transform();
+      this._activate();
     }
 
     _inherits(Vision, _EventEmitter);
@@ -868,9 +870,13 @@
     _createClass(Vision, {
       _eventify: {
         value: function _eventify() {
+          this.on("run", this.run);
+        }
+      },
+      _enableTabUI: {
+        value: function _enableTabUI() {
           var _this = this;
 
-          this.on("run", this.run);
           var $tabs = this.el.tabs.querySelectorAll(".evoker__tab");
           var $contents = this.el.contents.querySelectorAll(".evoker__content");
 
@@ -901,7 +907,12 @@
           this.el.contents = elem({ className: className.contents });
           this.el.main.appendChild(this.el.info);
           this.el.main.appendChild(this.el.contents);
-          this._transform();
+        }
+      },
+      _activate: {
+        value: function _activate() {
+          addClass(this.el.codeblock, className.contentactive);
+          addClass(this.el.tabs.firstChild, className.tabactive);
         }
       },
       _autorun: {
@@ -935,7 +946,6 @@
           elements.forEach(function (el) {
             el.style.height = "" + height + "px";
             addClass(el, className.content);
-            console.log(el);
           });
         }
       },
@@ -975,7 +985,6 @@
           // this.el.codeblock = elem({className: className.content, attribute: {name: _attr, value:"js"}});
           this.el.codeblock.appendChild(scriptToCodeblock(source));
           addClass(this.el.codeblock, className.code);
-          addClass(this.el.codeblock, className.contentactive);
 
           this._add(this.el.codeblock);
         }
@@ -1024,11 +1033,8 @@
       _addTab: {
         value: function _addTab() {
           var tabs = elem({ className: className.tabs });
-          var current;
           if (this.script) {
-            current = elem({ className: className.tab, text: "JS", attribute: { name: _attr, value: "js" } });
-            addClass(current, className.tabactive);
-            tabs.appendChild(current);
+            tabs.appendChild(elem({ className: className.tab, text: "JS", attribute: { name: _attr, value: "js" } }));
           }
           if (this.html) {
             tabs.appendChild(elem({ className: className.tab, text: "HTML", attribute: { name: _attr, value: "html" } }));
@@ -1077,6 +1083,7 @@
           targetElement.appendChild(this.el.main);
           this._makeSameHeight();
           this._eventify();
+          this._enableTabUI();
           this._autorun();
           if (Prism) {
             [].forEach.call(this.el.main.querySelectorAll("code"), function (code) {
