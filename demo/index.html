@@ -10,7 +10,6 @@
 <script src="./prism.js"></script>
 <script src="./evoker.js"></script>
 <script>
-// evoker.log = false;
 var count = 0;
 
 evoker.add({
@@ -23,7 +22,7 @@ evoker.add({
   caption: "短い説明",
   description: "log:false でログを普通のconsoleに出力する。\ncodeオプションで実行するJSと表示するJSを変えられる",
   timestamp: true,
-  log: true,
+  log: false,
   script: function() {
     console.log("hogehoge");
   },
